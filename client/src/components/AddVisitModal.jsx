@@ -109,7 +109,7 @@ const AddVisitModal = ({ isOpen, onClose, onSave, initialData = {} }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
       <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-2xl m-4 overflow-y-auto max-h-[90vh]">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-gray-800">Add New Visit</h2>
