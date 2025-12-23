@@ -2,6 +2,9 @@ import { MdOutlineFamilyRestroom, MdAttachMoney } from "react-icons/md";
 import { FaUserDoctor } from "react-icons/fa6";
 import { BiSolidCategory } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDoctors } from "../store/slice/doctorSlice";
+import { useEffect } from "react";
 
 const options = [
   {
@@ -43,13 +46,20 @@ const options = [
 ];
 
 const Home = () => {
+  const { doctors } = useSelector((state) => state.doctor);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchDoctors());
+  }, [dispatch]);
+
+  const medicalName = doctors.map((item) => item.medicalName);
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-4 md:p-8">
       {/* Header Section */}
       <div className="max-w-7xl mx-auto mb-10">
         <div className="flex flex-col  items-center justify-between">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
-            মথুরা হোমিও সমাধান
+            {medicalName ? medicalName : "Mathura Homio Samadhan"}
           </h1>
           <p className="text-gray-600 mt-2">
             হোমিও চিকিৎসা নিন-আস্থা রাখুন-সুস্থ থাকুন

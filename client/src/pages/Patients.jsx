@@ -2,9 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPatients } from "../store/slice/patientsSlice";
+import { fetchDoctors } from "../store/slice/doctorSlice";
 
 const Patients = () => {
   const dispatch = useDispatch();
+
+  const { doctors } = useSelector((state) => state.doctor);
+  useEffect(() => {
+    dispatch(fetchDoctors());
+  }, [dispatch]);
+
+  const medicalName = doctors.map((item) => item.medicalName);
 
   const { patients, isLoading, isError } = useSelector(
     (state) => state.patient
@@ -53,9 +61,9 @@ const Patients = () => {
     <div className="flex-1 p-4 sm:p-6 bg-gray-50 min-h-screen">
       <div className="bg-white shadow-lg rounded-2xl p-4 sm:p-6 space-y-4">
         <div className="w-full flex flex-col items-center justify-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
-            মথুরা হোমিও সমাধান
-          </h1>
+          <Link to="/" className="text-3xl md:text-4xl font-bold text-gray-800">
+            {medicalName ? medicalName : "Mathura Homio Samadhan"}
+          </Link>
           <p className="text-gray-600 mt-2">
             হোমিও চিকিৎসা নিন-আস্থা রাখুন-সুস্থ থাকুন
           </p>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPatients,
@@ -231,6 +231,12 @@ const Serial = () => {
   const [editingVisitId, setEditingVisitId] = useState(null);
   const [selectedVisit, setSelectedVisit] = useState(null);
 
+  useEffect(() => {
+    dispatch(fetchDoctors());
+  }, [dispatch]);
+
+  const medicalName = doctors.map((item) => item.medicalName);
+
   const patient = useMemo(
     () => patients.find((p) => p.patientSerial === Number(patientSerialNumber)),
     [patients, patientSerialNumber]
@@ -363,8 +369,18 @@ const Serial = () => {
 
   return (
     <div className="flex-1 p-4 sm:p-6 bg-gray-50 min-h-screen">
+      <Link
+        to="/"
+        className="flex flex-col  items-center justify-between py-4 border-b-2 mb-4"
+      >
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+          {medicalName ? medicalName : "Mathura Homio Samadhan"}
+        </h1>
+        <p className="text-gray-600 mt-2">
+          হোমিও চিকিৎসা নিন-আস্থা রাখুন-সুস্থ থাকুন
+        </p>
+      </Link>
       <PatientHeader patient={patient} onBack={() => navigate("/patients")} />
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           {/* Visits Accordion */}

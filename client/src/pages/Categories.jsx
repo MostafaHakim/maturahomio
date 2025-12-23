@@ -9,12 +9,21 @@ import {
 import { FiPlus, FiTag, FiTrash2 } from "react-icons/fi";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { fetchDoctors } from "../store/slice/doctorSlice";
+import { Link } from "react-router-dom";
 
 const Categories = () => {
+  const { doctors } = useSelector((state) => state.doctor);
   const dispatch = useDispatch();
-  const { list: categories, isLoading, isError } = useSelector(
-    (state) => state.catagory
-  );
+  useEffect(() => {
+    dispatch(fetchDoctors());
+  }, [dispatch]);
+  const medicalName = doctors.map((item) => item.medicalName);
+  const {
+    list: categories,
+    isLoading,
+    isError,
+  } = useSelector((state) => state.catagory);
 
   const {
     register,
@@ -52,6 +61,14 @@ const Categories = () => {
     <div className="flex-1 p-4 sm:p-6 bg-gray-50 min-h-screen">
       <ToastContainer position="bottom-right" autoClose={3000} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="w-full flex flex-col items-center justify-center">
+          <Link to="/" className="text-3xl md:text-4xl font-bold text-gray-800">
+            {medicalName ? medicalName : "Mathura Homio Samadhan"}
+          </Link>
+          <p className="text-gray-600 mt-2">
+            হোমিও চিকিৎসা নিন-আস্থা রাখুন-সুস্থ থাকুন
+          </p>
+        </div>
         {/* Category List */}
         <div className="lg:col-span-2 bg-white shadow-lg rounded-2xl p-4 sm:p-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
