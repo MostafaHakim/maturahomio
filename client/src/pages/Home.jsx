@@ -48,14 +48,12 @@ const Home = () => {
       {/* Header Section */}
       <div className="max-w-7xl mx-auto mb-10">
         <div className="flex flex-col  items-center justify-between">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
-              মথুরা হোমিও সমাধান
-            </h1>
-            <p className="text-gray-600 mt-2">
-              হোমিও চিকিৎসা নিন-আস্থা রাখুন-সুস্থ থাকুন
-            </p>
-          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+            মথুরা হোমিও সমাধান
+          </h1>
+          <p className="text-gray-600 mt-2">
+            হোমিও চিকিৎসা নিন-আস্থা রাখুন-সুস্থ থাকুন
+          </p>
         </div>
       </div>
 

@@ -115,6 +115,7 @@ const Patients = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formatDate(patient.patientDate)}
                     </td>
+
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <Link
                         to={`${patient.patientSerial}`}
