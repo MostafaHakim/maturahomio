@@ -54,6 +54,15 @@ const Doctors = () => {
                   <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Doctor Name
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    Phone
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    Email
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    Address
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -64,6 +73,15 @@ const Doctors = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-sky-600 font-semibold">
                       {doctor.doctorName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-sky-600 font-semibold">
+                      {doctor.phone}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-sky-600 font-semibold">
+                      {doctor.email}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-sky-600 font-semibold">
+                      {doctor.address}
                     </td>
                   </tr>
                 ))}
@@ -119,6 +137,42 @@ const Doctors = () => {
                   Password must be at least 6 characters.
                 </p>
               )}
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-gray-600">
+                Phone Number
+              </label>
+              <input
+                {...register("phone", { required: true })}
+                className={`input w-full mt-1 ${
+                  errors.phone ? "border-red-500" : ""
+                }`}
+                placeholder="e.g., 01722440899"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-gray-600">
+                E-mail
+              </label>
+              <input
+                {...register("email", { required: true })}
+                className={`input w-full mt-1 ${
+                  errors.email ? "border-red-500" : ""
+                }`}
+                placeholder="e.g., demo@mail.com"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-gray-600">
+                Address
+              </label>
+              <input
+                {...register("address", { required: true })}
+                className={`input w-full mt-1 ${
+                  errors.address ? "border-red-500" : ""
+                }`}
+                placeholder="e.g., Bhulta Dhaka"
+              />
             </div>
             <button
               type="submit"

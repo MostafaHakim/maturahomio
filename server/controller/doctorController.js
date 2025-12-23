@@ -3,9 +3,17 @@ const bcrypt = require("bcrypt");
 
 const createDoctor = async (req, res) => {
   try {
-    const { medicalName, doctorName, password } = req.body;
+    const { medicalName, doctorName, password, email, phone, address } =
+      req.body;
 
-    if (!medicalName || !doctorName || !password) {
+    if (
+      !medicalName ||
+      !doctorName ||
+      !password ||
+      !email ||
+      !phone ||
+      !address
+    ) {
       return res.status(400).json({
         message: "All fields are required",
       });
@@ -18,8 +26,11 @@ const createDoctor = async (req, res) => {
       medicalName,
       doctorName,
       password: hashedPassword,
+      email,
+      phone,
+      address,
     });
-
+    console.log(createDoctor);
     await createNewDoctor.save();
 
     res.status(201).json({
