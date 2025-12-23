@@ -60,7 +60,7 @@ const Categories = () => {
   return (
     <div className="flex-1 p-4 sm:p-6 bg-gray-50 min-h-screen">
       <ToastContainer position="bottom-right" autoClose={3000} />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1  gap-6">
         <div className="w-full flex flex-col items-center justify-center">
           <Link to="/" className="text-3xl md:text-4xl font-bold text-gray-800">
             {medicalName ? medicalName : "Mathura Homio Samadhan"}
