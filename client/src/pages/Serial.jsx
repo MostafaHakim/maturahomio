@@ -29,22 +29,18 @@ import EditPrescriptionsModal from "../components/EditPrescriptionsModal";
 import Prescription from "../components/Prescription";
 import { useReactToPrint } from "react-to-print";
 
-// Sub-components
+// --- Sub-components defined first ---
+
 const PatientHeader = ({ patient, onBack }) => (
   <div className="flex items-center justify-between mb-6">
     <div className="flex items-center gap-4">
-      <button
-        onClick={onBack}
-        className="p-2 rounded-full hover:bg-gray-200 transition"
-      >
+      <button onClick={onBack} className="p-2 rounded-full hover:bg-gray-200 transition">
         <FiArrowLeft className="text-xl text-gray-600" />
       </button>
       <div className="flex items-center gap-3">
         <FiUser className="text-3xl text-sky-500" />
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">
-            {patient.patientName}
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-800">{patient.patientName}</h1>
           <p className="text-sm text-gray-500">
             Serial No: {patient.patientSerial} • Age: {patient.patientAge}
           </p>
@@ -62,10 +58,7 @@ const InfoCard = ({ title, icon, children, onEdit }) => (
         <h3 className="text-lg font-bold text-gray-700">{title}</h3>
       </div>
       {onEdit && (
-        <button
-          onClick={onEdit}
-          className="p-2 rounded-full hover:bg-gray-200 transition"
-        >
+        <button onClick={onEdit} className="p-2 rounded-full hover:bg-gray-200 transition">
           <FiEdit className="text-gray-500" />
         </button>
       )}
@@ -75,145 +68,108 @@ const InfoCard = ({ title, icon, children, onEdit }) => (
 );
 
 const VisitHistory = ({ visits = [], onAddVisit, onDeleteVisit }) => (
-  <InfoCard title="Visit History" icon={<FiClock className="text-cyan-500" />}>
-    <div className="space-y-4">
-      {visits.map((visit) => (
-        <div
-          key={visit._id}
-          className="flex justify-between items-start p-3 bg-gray-50 rounded-lg border border-gray-200"
-        >
+    <InfoCard title="Visit History" icon={<FiClock className="text-cyan-500" />}>
+      <div className="space-y-4">
+        {visits.map((visit) => (
+          <div key={visit._id} className="flex justify-between items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
+            <div>
+              <p className="font-semibold text-gray-800">{new Date(visit.date).toLocaleDateString()}</p>
+              <p className="text-sm text-gray-600">{visit.problem}</p>
+            </div>
+            <button onClick={() => onDeleteVisit(visit._id)} className="p-1 rounded-full hover:bg-red-100 transition">
+              <FiTrash2 className="text-red-500 h-4 w-4" />
+            </button>
+          </div>
+        ))}
+      </div>
+      <button onClick={onAddVisit} className="mt-4 flex items-center gap-2 text-sm font-semibold text-sky-600 hover:underline">
+        <FiPlus /> Add New Visit
+      </button>
+    </InfoCard>
+);
+  
+const VisitAccordion = ({ visit, index, handleEdit, onPrint }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+  
+    return (
+      <div className="space-y-2">
+        <div onClick={() => setIsExpanded(!isExpanded)} className="cursor-pointer flex justify-between items-center p-3 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
           <div>
-            <p className="font-semibold text-gray-800">
-              {new Date(visit.date).toLocaleDateString()}
-            </p>
+            <p className="font-semibold text-gray-800">Visit {index + 1} - {new Date(visit.date).toLocaleDateString()}</p>
             <p className="text-sm text-gray-600">{visit.problem}</p>
           </div>
-          <button
-            onClick={() => onDeleteVisit(visit._id)}
-            className="p-1 rounded-full hover:bg-red-100 transition"
-          >
-            <FiTrash2 className="text-red-500 h-4 w-4" />
-          </button>
+          <div>{isExpanded ? <span>▲</span> : <span>▼</span>}</div>
         </div>
-      ))}
-    </div>
-    <button
-      onClick={onAddVisit}
-      className="mt-4 flex items-center gap-2 text-sm font-semibold text-sky-600 hover:underline"
-    >
-      <FiPlus /> Add New Visit
-    </button>
-  </InfoCard>
-);
-
-const VisitAccordion = ({ visit, index, handleEdit, onPrint }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  return (
-    <div className="space-y-2">
-      <div
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="cursor-pointer flex justify-between items-center p-3 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition"
-      >
-        <div>
-          <p className="font-semibold text-gray-800">
-            Visit {index + 1} - {new Date(visit.date).toLocaleDateString()}
-          </p>
-          <p className="text-sm text-gray-600">{visit.problem}</p>
-        </div>
-        <div>
-          {isExpanded ? (
-            <span className="text-gray-500">▲</span>
-          ) : (
-            <span className="text-gray-500">▼</span>
-          )}
-        </div>
-      </div>
-
-      {isExpanded && (
-        <div className="space-y-4 p-4 bg-white rounded-lg shadow-md border border-gray-200">
-          <InfoCard
-            title="General Info"
-            icon={<FiClipboard className="text-blue-500" />}
-            onEdit={() => handleEdit("general", visit, visit._id)}
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="font-semibold text-gray-600">Condition</p>
-                <p>{visit.condition}</p>
+  
+        {isExpanded && (
+          <div className="space-y-4 p-4 bg-white rounded-lg shadow-md border border-gray-200">
+            <InfoCard title="General Info" icon={<FiClipboard className="text-blue-500" />} onEdit={() => handleEdit("general", visit, visit._id)}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="font-semibold text-gray-600">Condition</p>
+                  <p>{visit.condition}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-600">Duration</p>
+                  <p>{visit.duration}</p>
+                </div>
+              </div>
+            </InfoCard>
+  
+            <InfoCard title="Symptoms" icon={<FiHeart className="text-red-500" />} onEdit={() => handleEdit("symptoms", { symtoms: visit.symtoms }, visit._id)}>
+              <div className="mb-2">
+                <p className="font-semibold text-gray-600">Main Symptom:</p>
+                <p className="text-gray-800">{visit.symtoms?.symtomsName || "N/A"}</p>
               </div>
               <div>
-                <p className="font-semibold text-gray-600">Duration</p>
-                <p>{visit.duration}</p>
+                <p className="font-semibold text-gray-600 mb-2">Sub-symptoms:</p>
+                <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+                  {visit.symtoms?.subSymtoms?.length > 0 ? (
+                    visit.symtoms.subSymtoms.map((s, i) => (<li key={i}>{s.subSymtomsName}</li>))
+                  ) : ( <li>No sub-symptoms recorded.</li> )}
+                </ul>
               </div>
-            </div>
-          </InfoCard>
-
-          <InfoCard
-            title="Symptoms"
-            icon={<FiHeart className="text-red-500" />}
-            onEdit={() =>
-              handleEdit("symptoms", { symtoms: visit.symtoms }, visit._id)
-            }
-          >
-            <div className="mb-2">
-              <p className="font-semibold text-gray-600">Main Symptom:</p>
-              <p className="text-gray-800">
-                {visit.symtoms.symtomsName || "N/A"}
-              </p>
-            </div>
-            <div>
-              <p className="font-semibold text-gray-600 mb-2">Sub-symptoms:</p>
-              <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
-                {visit.symtoms.subSymtoms?.length > 0 ? (
-                  visit.symtoms.subSymtoms.map((s, i) => (
-                    <li key={i}>{s.subSymtomsName}</li>
+            </InfoCard>
+  
+            <InfoCard title="Prescriptions" icon={<FiCalendar className="text-purple-500" />} onEdit={() => handleEdit( "prescriptions", { prescriptions: visit.prescriptions }, visit._id)}>
+              <ul className="space-y-2 text-sm">
+                {visit.prescriptions?.length > 0 ? (
+                  visit.prescriptions.map((p, i) => (
+                    <li key={i} className="flex justify-between p-2 bg-gray-50 rounded-md">
+                      <span className="font-semibold">{p.name}</span>
+                      <span className="text-gray-600">{p.dose}</span>
+                    </li>
                   ))
-                ) : (
-                  <li>No sub-symptoms recorded.</li>
-                )}
+                ) : ( <li>No prescriptions recorded.</li>)}
               </ul>
-            </div>
-          </InfoCard>
+            </InfoCard>
+            <button onClick={onPrint} className="mt-4 flex items-center gap-2 text-sm font-semibold text-sky-600 hover:underline">
+              <FiPrinter /> Create PDF
+            </button>
+          </div>
+        )}
+      </div>
+    );
+};
 
-          <InfoCard
-            title="Prescriptions"
-            icon={<FiCalendar className="text-purple-500" />}
-            onEdit={() =>
-              handleEdit(
-                "prescriptions",
-                { prescriptions: visit.prescriptions },
-                visit._id
-              )
-            }
-          >
-            <ul className="space-y-2 text-sm">
-              {visit.prescriptions?.length > 0 ? (
-                visit.prescriptions.map((p, i) => (
-                  <li
-                    key={i}
-                    className="flex justify-between p-2 bg-gray-50 rounded-md"
-                  >
-                    <span className="font-semibold">{p.name}</span>
-                    <span className="text-gray-600">{p.dose}</span>
-                  </li>
-                ))
-              ) : (
-                <li>No prescriptions recorded.</li>
-              )}
-            </ul>
-          </InfoCard>
-          <button
-            onClick={onPrint}
-            className="mt-4 flex items-center gap-2 text-sm font-semibold text-sky-600 hover:underline"
-          >
-            <FiPrinter /> Create PDF
-          </button>
+const HistoryTagList = ({ title, items }) => (
+    <div className="text-sm mb-2">
+      <p className="font-semibold">{title}</p>
+      {items && items.length > 0 ? (
+        <div className="flex flex-wrap gap-2 mt-1">
+          {items.map((item, index) => (
+            <span key={index} className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
+              {item}
+            </span>
+          ))}
         </div>
+      ) : (
+        <p className="text-gray-600">N/A</p>
       )}
     </div>
-  );
-};
+);
+
+// --- Main Serial Component ---
 
 const Serial = () => {
   const { patientSerialNumber } = useParams();
@@ -260,7 +216,7 @@ const Serial = () => {
     if (selectedVisit && componentRef) {
       setTimeout(() => {
         handlePrint();
-      }, 200); // DOM ready wait
+      }, 200);
     }
   }, [selectedVisit]);
 
@@ -269,7 +225,7 @@ const Serial = () => {
       await dispatch(addVisit({ patientId: patient._id, visitData })).unwrap();
       toast.success("New visit added successfully!");
     } catch (error) {
-      toast.error(`Failed to add visit: ${error.message}`);
+      toast.error(`Failed to add visit: ${error}`);
     }
   };
 
@@ -302,6 +258,8 @@ const Serial = () => {
   const handleSave = async (data) => {
     try {
       let updatedVisits = [...patient.visits];
+      let updatedHistory = patient.history;
+      let updatedMedicalHistory = patient.medicalHistory;
 
       if (editingSection === "prescriptions") {
         updatedVisits = updatedVisits.map((v) =>
@@ -314,25 +272,31 @@ const Serial = () => {
           v._id === editingVisitId ? { ...v, symtoms: data.symtoms } : v
         );
       } else if (editingSection === "history") {
-        patient.history = { ...data.history };
+        updatedHistory = { ...data.history };
+        updatedMedicalHistory = data.medicalHistory;
       } else {
-        // For 'general' section
         updatedVisits = updatedVisits.map((v) =>
           v._id === editingVisitId ? { ...v, ...data } : v
         );
       }
 
-      const updatedData = { ...patient, visits: updatedVisits };
+      const updatedData = {
+        ...patient,
+        history: updatedHistory,
+        medicalHistory: updatedMedicalHistory,
+        visits: updatedVisits,
+      };
 
       await dispatch(
         updatePatient({ id: patient._id, data: updatedData })
       ).unwrap();
+
       toast.success("Patient updated successfully!");
       setEditModalOpen(false);
       setSymptomsModalOpen(false);
       setPrescriptionsModalOpen(false);
     } catch (error) {
-      toast.error("Failed to update patient");
+      toast.error(`Failed to update: ${error}`);
     }
   };
 
@@ -364,14 +328,14 @@ const Serial = () => {
     );
   }
 
-  const { history = {}, visits = [], patientDate } = patient;
-  const doctor = doctors[0] || {}; // Use the first doctor for now
+  const { history = {}, visits = [] } = patient;
+  const doctor = doctors[0] || {}; // Use first doctor for now
 
   return (
     <div className="flex-1 p-4 sm:p-6 bg-gray-50 min-h-screen">
       <Link
         to="/"
-        className="flex flex-col  items-center justify-between py-4 border-b-2 mb-4"
+        className="flex flex-col items-center justify-between py-4 border-b-2 mb-4"
       >
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
           {medicalName ? medicalName : "Mathura Homio Samadhan"}
@@ -380,10 +344,11 @@ const Serial = () => {
           হোমিও চিকিৎসা নিন-আস্থা রাখুন-সুস্থ থাকুন
         </p>
       </Link>
+
       <PatientHeader patient={patient} onBack={() => navigate("/patients")} />
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          {/* Visits Accordion */}
           {visits.map((visit, index) => (
             <VisitAccordion
               key={visit._id}
@@ -405,32 +370,23 @@ const Serial = () => {
           <InfoCard
             title="Patient History"
             icon={<FiClock className="text-green-500" />}
-            onEdit={() => handleEdit("history", { history })}
+            onEdit={() =>
+              handleEdit("history", {
+                history,
+                medicalHistory: patient.medicalHistory,
+              })
+            }
           >
-            <div className="space-y-2 text-sm">
-              <div>
-                <p className="font-semibold">Present</p>
-                <p className="text-gray-600">
-                  {history.presentHistory || "N/A"}
-                </p>
-              </div>
-              <div>
-                <p className="font-semibold">Past</p>
-                <p className="text-gray-600">{history.pastHistory || "N/A"}</p>
-              </div>
-              <div>
-                <p className="font-semibold">Family</p>
-                <p className="text-gray-600">
-                  {history.familyHistory || "N/A"}
-                </p>
-              </div>
-            </div>
+            <HistoryTagList title="Present" items={history.presentHistory} />
+            <HistoryTagList title="Past" items={history.pastHistory} />
+            <HistoryTagList title="Family" items={history.familyHistory} />
+            <HistoryTagList title="Medical" items={patient.medicalHistory} />
           </InfoCard>
         </div>
       </div>
+
       {selectedVisit && (
         <div style={{ display: "none" }}>
-          {console.log(patient, selectedVisit, doctor)}
           <Prescription
             ref={componentRef}
             patient={patient}
@@ -464,6 +420,7 @@ const Serial = () => {
         onSave={handleSave}
         defaultValues={defaultValues}
       />
+
       <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );

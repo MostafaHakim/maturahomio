@@ -34,13 +34,21 @@ export const createPatient = createAsyncThunk(
 // ✅ New thunk to update patient
 export const updatePatient = createAsyncThunk(
   "patients/updatePatient",
-  async ({ id, data }) => {
-    const res = await fetch(`${BASE_URL}/patients/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    return res.json();
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`${BASE_URL}/patients/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        return rejectWithValue(error.message);
+      }
+      return res.json();
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -151,7 +159,7 @@ const patientSlice = createSlice({
       })
       .addCase(updatePatient.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = action.error.message;
+        state.isError = action.payload;
       })
 
       // addVisit

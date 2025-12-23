@@ -8,10 +8,14 @@ const patientSchema = new mongoose.Schema(
     patientDate: Date,
 
     history: {
-      presentHistory: String,
-      pastHistory: String,
-      familyHistory: String,
+      presentHistory: [{ type: String }],
+      pastHistory: [{ type: String }],
+      familyHistory: [{ type: String }],
     },
+
+    medicalHistory: [{
+      type: String,
+    }],
 
     visits: [
       {

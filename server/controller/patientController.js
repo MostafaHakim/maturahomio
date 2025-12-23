@@ -68,6 +68,7 @@ const updatePatient = async (req, res) => {
 
     res.status(200).json(patient);
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       message: "Failed to update patient",
       error: error.message,
@@ -88,7 +89,8 @@ const addVisit = async (req, res) => {
 
     res.status(200).json(patient);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Failed to add visit", error: error.message });
   }
 };
 

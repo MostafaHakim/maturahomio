@@ -14,6 +14,7 @@ const doctorRoute = require("./router/doctor");
 const patientRoute = require("./router/patientRoute");
 const catagoryRoute = require("./router/catagoryRoute");
 const accountingRoute = require("./router/accountingRoute");
+const historyRoute = require("./router/historyRoute");
 
 mongoose
   .connect(MONGODB_URI)
@@ -32,6 +33,7 @@ app.use("/doctors", doctorRoute);
 app.use("/patients", patientRoute);
 app.use("/catagory", catagoryRoute);
 app.use("/accounting", accountingRoute);
+app.use("/history", historyRoute);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
