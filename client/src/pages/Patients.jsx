@@ -25,11 +25,15 @@ const Patients = () => {
   }, [dispatch]);
 
   // 🔍 search filter logic
-  const filteredPatients = patients.filter(
-    (patient) =>
-      patient.patientName.toLowerCase().includes(search.toLowerCase()) ||
-      patient.patientSerial.toString().includes(search)
-  );
+  const filteredPatients = patients.filter((patient) => {
+    const searchText = search.trim().toLowerCase();
+
+    return (
+      patient.patientName?.toLowerCase().includes(searchText) ||
+      patient.patientSerial?.toString().includes(searchText) ||
+      patient.patientMobile?.includes(searchText)
+    );
+  });
 
   // 📅 date format function
   const formatDate = (dateString) => {
@@ -104,6 +108,9 @@ const Patients = () => {
                     Patient Name
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    Mobile Number
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Admission Date
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">
@@ -119,6 +126,9 @@ const Patients = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-sky-600 font-semibold">
                       {patient.patientName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 ">
+                      {patient.patientMobile}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formatDate(patient.patientDate)}

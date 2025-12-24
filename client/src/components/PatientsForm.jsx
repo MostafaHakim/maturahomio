@@ -40,6 +40,7 @@ const PatientForm = () => {
       patientSerial: "",
       patientName: "",
       patientAge: "",
+      patientMobile: "",
       patientDate: new Date().toISOString().split("T")[0],
       history: { presentHistory: "", pastHistory: "", familyHistory: "" },
       visits: [
@@ -163,6 +164,16 @@ const PatientForm = () => {
                   errors.patientName ? "border-red-500" : ""
                 }`}
                 placeholder="Patient Full Name"
+              />
+              <input
+                type="text"
+                {...register("patientMobile", {
+                  required: "Mobile number is required",
+                })}
+                className={`input w-full ${
+                  errors.patientName ? "border-red-500" : ""
+                }`}
+                placeholder="Patient Mobile Number"
               />
               <input
                 type="number"
