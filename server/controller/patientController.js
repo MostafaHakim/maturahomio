@@ -2,16 +2,24 @@ const Patient = require("../model/patientModel");
 
 const createNewPatient = async (req, res) => {
   try {
-    const { patientSerial, patientName, patientAge, patientDate, history, visits } =
-      req.body;
+    const {
+      patientSerial,
+      patientName,
+      patientAge,
+      patientDate,
+      history,
+      visits,
+      patientMobile,
+    } = req.body;
 
-    if (!patientName || !patientAge) {
+    if (!patientName || !patientAge || !patientMobile) {
       return res.status(400).json({ message: "Mandatory fields are required" });
     }
 
     const patient = new Patient({
       patientSerial,
       patientName,
+      patientMobile,
       patientAge,
       patientDate,
       history: history || {},
@@ -90,7 +98,9 @@ const addVisit = async (req, res) => {
     res.status(200).json(patient);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Failed to add visit", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to add visit", error: error.message });
   }
 };
 

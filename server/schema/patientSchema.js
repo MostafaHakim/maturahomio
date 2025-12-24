@@ -5,6 +5,7 @@ const patientSchema = new mongoose.Schema(
     patientSerial: { type: Number, required: true },
     patientName: { type: String, required: true },
     patientAge: { type: Number, required: true },
+    patientMobile: { type: String, required: true },
     patientDate: Date,
 
     history: {
@@ -13,9 +14,11 @@ const patientSchema = new mongoose.Schema(
       familyHistory: [{ type: String }],
     },
 
-    medicalHistory: [{
-      type: String,
-    }],
+    medicalHistory: [
+      {
+        type: String,
+      },
+    ],
 
     visits: [
       {
